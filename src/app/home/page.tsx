@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { PageShell } from "@/components/page-shell";
 import { useAuth } from "@/components/auth-provider";
@@ -45,9 +46,39 @@ const ceremonyProgram = [
   },
 ];
 
+type Countdown = {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+};
+
+const weddingDate = new Date("2026-04-04T13:30:00");
+
+function getCountdownValue(): Countdown {
+  const now = new Date().getTime();
+  const distance = Math.max(0, weddingDate.getTime() - now);
+
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((distance / (1000 * 60)) % 60);
+  const seconds = Math.floor((distance / 1000) % 60);
+
+  return { days, hours, minutes, seconds };
+}
+
 export default function HomePage() {
   const { status, session } = useAuth();
   const isAuthenticated = status === "authenticated";
+  const [countdown, setCountdown] = useState<Countdown>(getCountdownValue());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountdown(getCountdownValue());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <PageShell>
@@ -98,6 +129,35 @@ export default function HomePage() {
                 Debloquer avec mon code
               </Link>
             )}
+          </div>
+
+          <div className="mt-6 max-w-2xl rounded-2xl border border-white/25 bg-white/10 p-4 backdrop-blur-md sm:p-5">
+            <p className="text-[11px] uppercase tracking-[0.22em] text-white/85">
+              Countdown to forever
+            </p>
+            <p className="mt-2 text-sm text-white/85">
+              Plus que quelques instants avant notre grand oui.
+            </p>
+            <div className="mt-4 grid grid-cols-4 gap-2">
+              {[
+                { label: "Jours", value: countdown.days },
+                { label: "Heures", value: countdown.hours },
+                { label: "Minutes", value: countdown.minutes },
+                { label: "Secondes", value: countdown.seconds },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="rounded-xl border border-white/20 bg-black/20 px-2 py-3 text-center shadow-[0_0_22px_rgba(255,255,255,0.12)]"
+                >
+                  <p className="text-xl font-semibold text-white sm:text-2xl">
+                    {String(item.value).padStart(2, "0")}
+                  </p>
+                  <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-white/70">
+                    {item.label}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </motion.div>
       </section>

@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Wedding Platform V2
 
-## Getting Started
+Plateforme web privee et immersive pour le mariage de **Hermelinda & Christian**.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Next.js (App Router)
+- React + TypeScript
+- Tailwind CSS
+- Firebase Firestore + Storage
+- Framer Motion
+
+## Pages
+
+- `/login` (auth par code)
+- `/home`
+- `/timeline`
+- `/gallery`
+- `/video`
+- `/music`
+- `/guestbook`
+- `/admin`
+
+Toutes les routes sont protegees sauf `/login`.
+
+## Configuration Firebase
+
+1. Copier `.env.local.example` en `.env.local`
+2. Renseigner les variables Firebase
+3. Creer les collections Firestore:
+   - `access_codes`
+   - `messages`
+   - `photos`
+
+Exemple de document `access_codes` (id = code):
+
+```json
+{
+  "code": "ABC123",
+  "name": "Invite",
+  "isActive": true,
+  "sessionId": null,
+  "lastLoginAt": null
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Lancer le projet
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Ouvrir [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+## Tester sans Firebase (mode demo)
 
-To learn more about Next.js, take a look at the following resources:
+Si les variables Firebase ne sont pas configurees, l'application passe
+automatiquement en mode demo avec stockage local navigateur.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- code de connexion demo: `DEMO2026`
+- `/admin` et `/guestbook` fonctionnent en localStorage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Vous pouvez aussi forcer ce mode avec:
 
-## Deploy on Vercel
+```bash
+NEXT_PUBLIC_DEMO_MODE=true
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Auth custom (session unique)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Connexion via code
+- Generation de `sessionId` UUID
+- Stockage en Firestore (`sessionId`, `lastLoginAt`)
+- Stockage local (`localStorage`)
+- Verification de session au chargement et regulierement
+- Nouvelle connexion invalide automatiquement l'ancienne

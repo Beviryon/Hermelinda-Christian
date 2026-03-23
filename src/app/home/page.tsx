@@ -91,20 +91,12 @@ export default function HomePage() {
                 Entrer dans notre histoire
               </Link>
             ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="rounded-xl bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition hover:brightness-95"
-                >
-                  Debloquer avec mon code
-                </Link>
-                <Link
-                  href="/marie"
-                  className="rounded-xl border border-white/40 bg-white/15 px-5 py-3 text-sm font-medium text-white backdrop-blur transition hover:bg-white/25"
-                >
-                  Espace maries
-                </Link>
-              </>
+              <Link
+                href="/login"
+                className="rounded-xl bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition hover:brightness-95"
+              >
+                Debloquer avec mon code
+              </Link>
             )}
           </div>
         </motion.div>

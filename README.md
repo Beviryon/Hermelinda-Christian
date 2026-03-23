@@ -75,3 +75,5 @@ NEXT_PUBLIC_DEMO_MODE=true
 - Stockage local (`localStorage`)
 - Verification de session au chargement et regulierement
 - Nouvelle connexion invalide automatiquement l'ancienne
+# Hermelinda-Christian
+Plateforme web privée et immersive pour revivre le mariage de Hermelinda &amp; Christian, développée avec Next.js, Tailwind CSS et Firebase.
